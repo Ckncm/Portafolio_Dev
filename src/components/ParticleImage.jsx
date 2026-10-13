@@ -104,11 +104,12 @@ function ParticleImage({
           let alpha
           if (alphaMode) {
             visible = a > 30
-            alpha = (a / 255) * (0.45 + 0.55 * lum)
+            alpha = (a / 255) * (0.65 + 0.35 * lum)
           } else {
             visible = lum > 0.12
-            alpha = Math.min(1, 0.2 + lum * 0.8)
+            alpha = Math.min(1, 0.35 + lum * 0.8)
           }
+          alpha = Math.min(1, alpha * 1.5)
           if (!visible) continue
           const homeX = offsetX + x
           const homeY = offsetY + y

@@ -6,6 +6,7 @@ import AppScreens from './sections/AppScreens.jsx'
 import PixelCurtain from './components/PixelCurtain.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
 import DotField from './components/DotField.jsx'
+import PageTurn from './components/PageTurn.jsx'
 
 function App() {
   const [showPreloader, setShowPreloader] = useState(true)
@@ -31,8 +32,9 @@ function App() {
       >
         {siteVisible && <DotField />}
         <div className="relative z-10">
-          {siteVisible && <ParticleDemo />}
-          {siteVisible && <AppScreens />}
+        {siteVisible && <ParticleDemo />}
+        {siteVisible && <PageTurn />}
+        {siteVisible && <AppScreens />}
         </div>
         {siteVisible && <SiteHeader />}
       </main>

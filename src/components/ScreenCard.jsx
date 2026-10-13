@@ -15,7 +15,7 @@ function ScreenCard({ title, image, active, containerRef }) {
         }}
       />
       <div
-        className="flex h-[430px] w-[300px] items-center justify-center overflow-hidden rounded-[20px] bg-white"
+        className="flex h-[430px] w-[300px] items-center justify-center overflow-hidden rounded-[20px] bg-black"
         style={{
           boxShadow:
             '0 0 1px hsl(0deg 0% 0% / 0.075), 0 0 2px hsl(0deg 0% 0% / 0.075), 0 0 4px hsl(0deg 0% 0% / 0.075), 0 0 8px hsl(0deg 0% 0% / 0.075), 0 0 16px hsl(0deg 0% 0% / 0.075)',
@@ -35,10 +35,10 @@ function ScreenCard({ title, image, active, containerRef }) {
           />
         ) : (
           <div className="flex flex-col items-center gap-3">
-            <span className="font-mono text-xs tracking-[0.3em] text-zinc-800 uppercase">
+            <span className="font-mono text-xs tracking-[0.3em] text-zinc-200 uppercase">
               {title}
             </span>
-            <span className="font-mono text-[10px] tracking-[0.2em] text-zinc-400 uppercase">
+            <span className="font-mono text-[10px] tracking-[0.2em] text-zinc-500 uppercase">
               placeholder
             </span>
           </div>
