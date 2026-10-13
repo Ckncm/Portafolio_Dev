@@ -79,6 +79,8 @@ function AppScreens() {
         {appScreens.map((screen, i) => (
           <ScreenCard
             key={screen.id}
+            index={i}
+            reversed={i % 2 === 1}
             title={screen.title}
             image={screen.image}
             active={activeIndex === -2 || i === activeIndex}
