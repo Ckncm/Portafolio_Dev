@@ -1,5 +1,5 @@
 import ParticleImage from '../components/ParticleImage.jsx'
-import ckncmLogo from '../assets/ckncm_logo.webp'
+import ckncmLogo from '../assets/logos/ckncm_logo.webp'
 
 function ParticleDemo() {
   return (
