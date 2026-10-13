@@ -33,11 +33,11 @@ function App() {
       >
         {siteVisible && <DotField />}
         <div className="relative z-10">
-        {siteVisible && <ParticleDemo />}
-        {siteVisible && <PageTurn />}
-        {siteVisible && <AppScreens />}
-        {siteVisible && <SocialLinks />}
+          {siteVisible && <ParticleDemo />}
+          {siteVisible && <PageTurn />}
+          {siteVisible && <AppScreens />}
         </div>
+        {siteVisible && <SocialLinks />}
         {siteVisible && <SiteHeader />}
       </main>
       {showPreloader && <Preloader onDone={handlePreloaderDone} />}

@@ -4,7 +4,7 @@ function PageTurn() {
       <svg
         viewBox="0 0 1440 120"
         preserveAspectRatio="none"
-        className="block h-24 w-full"
+        className="block h-6 w-full"
       >
         <defs>
           <filter id="pageGlow">
@@ -12,14 +12,14 @@ function PageTurn() {
           </filter>
         </defs>
         <path
-          d="M0,60 Q720,-40 1440,60"
+          d="M0,20 L1440,20"
           fill="none"
           stroke="#3B70B0"
           strokeWidth="1.5"
           opacity="0.45"
           filter="url(#pageGlow)"
         />
-        <path d="M0,120 L0,60 Q720,-40 1440,60 L1440,120 Z" fill="#050505" />
+        <path d="M0,120 L0,20 L1440,20 L1440,120 Z" fill="#050505" />
       </svg>
     </div>
   )
