@@ -51,10 +51,22 @@ function AppScreens() {
 
   return (
     <section className="mx-auto w-full max-w-[500px] px-6 pt-10 pb-40">
+      <div className="mb-16 flex flex-col items-center gap-3 text-center">
+        <h2 className="font-mono text-4xl font-bold tracking-[0.2em] text-zinc-100 uppercase sm:text-5xl">
+          Proyectos
+        </h2>
+        <h3 className="font-mono text-lg tracking-[0.4em] text-[#3B70B0] uppercase">
+          Calet
+        </h3>
+        <p className="font-mono text-xs tracking-[0.3em] text-zinc-500 uppercase">
+          Programador frontend y diseño UI/UX
+        </p>
+      </div>
       {appScreens.map((screen, i) => (
         <ScreenCard
           key={screen.id}
           title={screen.title}
+          image={screen.image}
           active={activeIndex === -2 || i === activeIndex}
           containerRef={(el) => {
             itemRefs.current[i] = el

@@ -5,6 +5,7 @@ import ParticleDemo from './sections/ParticleDemo.jsx'
 import AppScreens from './sections/AppScreens.jsx'
 import PixelCurtain from './components/PixelCurtain.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
+import DotField from './components/DotField.jsx'
 
 function App() {
   const [showPreloader, setShowPreloader] = useState(true)
@@ -28,8 +29,11 @@ function App() {
           siteVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
-        {siteVisible && <ParticleDemo />}
-        {siteVisible && <AppScreens />}
+        {siteVisible && <DotField />}
+        <div className="relative z-10">
+          {siteVisible && <ParticleDemo />}
+          {siteVisible && <AppScreens />}
+        </div>
         {siteVisible && <SiteHeader />}
       </main>
       {showPreloader && <Preloader onDone={handlePreloaderDone} />}

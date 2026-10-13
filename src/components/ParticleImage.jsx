@@ -2,10 +2,12 @@ import { useEffect, useRef } from 'react'
 
 const SAMPLE_STEP = 5
 const PARTICLE_SIZE = 2
-const SPRING = 0.04
+const SPRING = 0.035
 const FRICTION = 0.86
 const REPEL_RADIUS = 90
 const REPEL_FORCE = 4.5
+const SCATTER = 0.06
+const FADE_STEP = 0.012
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
@@ -41,6 +43,7 @@ function ParticleImage({
     let viewH = 0
     let disposed = false
     let resizeTimer = null
+    let fade = 0
     const reduced = prefersReducedMotion()
 
     const image = new Image()
@@ -110,7 +113,7 @@ function ParticleImage({
           const homeX = offsetX + x
           const homeY = offsetY + y
           const angle = Math.random() * Math.PI * 2
-          const dist = Math.random() * Math.max(viewW, viewH) * 0.4
+          const dist = Math.random() * Math.max(viewW, viewH) * SCATTER
           next.push({
             homeX,
             homeY,
@@ -130,6 +133,7 @@ function ParticleImage({
       ctx.clearRect(0, 0, viewW, viewH)
       const m = mouseRef.current
       const r2 = repelRadius * repelRadius
+      fade = Math.min(1, fade + FADE_STEP)
       for (const p of particles) {
         const dx = p.x - m.x
         const dy = p.y - m.y
@@ -146,7 +150,7 @@ function ParticleImage({
         p.vy *= FRICTION
         p.x += p.vx
         p.y += p.vy
-        ctx.fillStyle = alphaStyle(p.alpha)
+        ctx.fillStyle = alphaStyle(p.alpha * fade)
         ctx.fillRect(p.x, p.y, particleSize, particleSize)
       }
       raf = requestAnimationFrame(tick)

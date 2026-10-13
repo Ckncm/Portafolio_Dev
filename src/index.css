@@ -7,6 +7,7 @@
 
 body {
   @apply font-sans antialiased;
+  background-color: #050505;
 }
 
 @keyframes pixel-appear {
