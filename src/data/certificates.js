@@ -1,4 +1,4 @@
-import cert1 from '../assets/certificados/certificado_1.webp'
+import cert1 from '../assets/certificados/certificado_01.webp'
 
 export const certificates = [
   {
