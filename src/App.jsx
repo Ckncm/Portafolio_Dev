@@ -8,6 +8,7 @@ import SiteHeader from './components/SiteHeader.jsx'
 import DotField from './components/DotField.jsx'
 import PageTurn from './components/PageTurn.jsx'
 import SocialLinks from './sections/SocialLinks.jsx'
+import Formacion from './sections/Formacion.jsx'
 
 function App() {
   const [showPreloader, setShowPreloader] = useState(true)
@@ -37,6 +38,7 @@ function App() {
           {siteVisible && <PageTurn />}
           {siteVisible && <AppScreens />}
         </div>
+        {siteVisible && <Formacion />}
         {siteVisible && <SocialLinks />}
         {siteVisible && <SiteHeader />}
       </main>
