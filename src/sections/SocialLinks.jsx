@@ -13,11 +13,11 @@ function SocialLinks() {
 
       <a
         href="mailto:ckncmm@gmail.com"
-        className="group mt-10 flex w-full max-w-md items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]"
+        className="group mt-10 flex w-full max-w-md items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-all duration-300 hover:border-[#D62D32]/40 hover:bg-white/[0.06]"
       >
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#7c3aed]/20">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#D62D32]/20">
           <svg
-            className="h-5 w-5 text-[#a78bfa]"
+            className="h-5 w-5 text-[#D62D32]"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -39,7 +39,7 @@ function SocialLinks() {
           </p>
         </div>
         <svg
-          className="h-5 w-5 shrink-0 text-zinc-600 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-zinc-300"
+          className="h-5 w-5 shrink-0 text-zinc-600 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#D62D32]"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

@@ -14,10 +14,14 @@ const WOBBLE_RADIUS = 10
 const SPRING = 0.04
 const FRICTION = 0.86
 const IDLE_DELAY = 1200
-const BLUE_RATIO = 0.85
+const BLUE_RATIO = 0.82
+const RED_RATIO = 0.12
 const DEEP_BLUE = [17, 27, 94]
 const BRIGHT_BLUE = [59, 112, 176]
 const LIGHT_BLUE = [100, 150, 220]
+const DEEP_RED = [120, 18, 20]
+const BRIGHT_RED = [214, 45, 50]
+const LIGHT_RED = [235, 90, 95]
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
@@ -98,11 +102,18 @@ function DotField() {
       for (let i = 0; i < DOT_COUNT; i++) {
         const angle = rand(i, 10) * Math.PI * 2
         const t = Math.pow(rand(i, 11), 0.4)
-        const isBlue = rand(i, 12) < BLUE_RATIO
+        const pick = rand(i, 12)
         const deep = rand(i, 13) < 0.25
         let baseColor = [255, 255, 255]
-        if (isBlue) baseColor = deep ? DEEP_BLUE : BRIGHT_BLUE
-        baseColor = mix(baseColor, LIGHT_BLUE, rand(i, 14) * 0.5)
+        let lightColor = LIGHT_BLUE
+        if (pick < BLUE_RATIO) {
+          baseColor = deep ? DEEP_BLUE : BRIGHT_BLUE
+          lightColor = LIGHT_BLUE
+        } else if (pick < BLUE_RATIO + RED_RATIO) {
+          baseColor = deep ? DEEP_RED : BRIGHT_RED
+          lightColor = LIGHT_RED
+        }
+        baseColor = mix(baseColor, lightColor, rand(i, 14) * 0.5)
         const baseAlpha = 0.12 + t * 0.3 + rand(i, 5) * 0.15
         const startX = cx + Math.cos(angle) * t * R + (rand(i, 30) - 0.5) * 80
         const startY = cy + Math.sin(angle) * t * R + (rand(i, 31) - 0.5) * 80

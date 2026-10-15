@@ -71,7 +71,7 @@ function Formacion() {
               aria-label={cert.title}
               className={`overflow-hidden rounded-lg border transition-all duration-300 ${
                 i === activeIndex
-                  ? 'border-[#3B70B0] opacity-100'
+                  ? 'border-[#D62D32] opacity-100'
                   : 'border-white/10 opacity-40 hover:opacity-70'
               }`}
               style={{ width: 56, height: 38 }}
@@ -105,7 +105,7 @@ function Formacion() {
             <span
               key={cert.id}
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === activeIndex ? 'w-6 bg-[#3B70B0]' : 'w-1.5 bg-zinc-700'
+                i === activeIndex ? 'w-6 bg-[#D62D32]' : 'w-1.5 bg-zinc-700'
               }`}
             />
           ))}
