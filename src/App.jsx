@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Preloader from './sections/Preloader.jsx'
 import TerminalLoader from './sections/TerminalLoader.jsx'
 import ParticleDemo from './sections/ParticleDemo.jsx'
-import AppScreens from './sections/AppScreens.jsx'
+import Projects from './sections/Projects.jsx'
 import PixelCurtain from './components/PixelCurtain.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
 import DotField from './components/DotField.jsx'
@@ -16,13 +16,24 @@ function App() {
   const [showCurtain, setShowCurtain] = useState(false)
   const [siteVisible, setSiteVisible] = useState(false)
 
+  // Asegurar que siempre inicie en la parte superior sin restaurar posiciones anteriores
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+    window.scrollTo(0, 0)
+  }, [])
+
   const handlePreloaderDone = useCallback(() => {
     setShowPreloader(false)
     setShowTerminal(true)
   }, [])
   const handleTerminalReveal = useCallback(() => setShowCurtain(true), [])
   const handleTerminalDone = useCallback(() => setShowTerminal(false), [])
-  const handleCurtainCovered = useCallback(() => setSiteVisible(true), [])
+  const handleCurtainCovered = useCallback(() => {
+    window.scrollTo(0, 0)
+    setSiteVisible(true)
+  }, [])
   const handleCurtainDone = useCallback(() => setShowCurtain(false), [])
 
   return (
@@ -36,7 +47,7 @@ function App() {
         <div className="relative z-10">
           {siteVisible && <ParticleDemo />}
           {siteVisible && <PageTurn />}
-          {siteVisible && <AppScreens />}
+          {siteVisible && <Projects />}
         </div>
         {siteVisible && <Formacion />}
         {siteVisible && <SocialLinks />}
