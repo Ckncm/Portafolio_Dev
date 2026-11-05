@@ -97,10 +97,6 @@ function ProjectDetail({ project }) {
                 title={project.title}
                 alt={`${project.title} pantalla ${activeImageIndex + 1}`}
                 onExpand={() => setIsLightboxOpen(true)}
-                onPrev={handlePrev}
-                onNext={handleNext}
-                currentIndex={activeImageIndex}
-                totalImages={images.length}
               />
             </div>
 

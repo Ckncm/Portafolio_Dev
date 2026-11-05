@@ -4,16 +4,7 @@ const prefersReduced = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-function PhoneMockup({
-  image,
-  alt,
-  title,
-  onExpand,
-  onPrev,
-  onNext,
-  currentIndex,
-  totalImages,
-}) {
+function PhoneMockup({ image, alt, title, onExpand }) {
   const containerRef = useRef(null)
   const [reduced, setReduced] = useState(prefersReduced)
   const [transform, setTransform] = useState(
