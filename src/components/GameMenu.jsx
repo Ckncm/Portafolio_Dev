@@ -37,7 +37,7 @@ function GameMenu({ onSelectScreen, disabled = false }) {
       {/* Encabezado HUD del menú */}
       <div className="mb-1 flex items-center justify-between px-2">
         <span className="font-mono text-[10px] sm:text-xs font-bold tracking-[0.3em] text-[#3B70B0] uppercase">
-          // Menu Principal
+          {'// Menu Principal'}
         </span>
         <span className="hidden sm:inline-block font-mono text-[10px] tracking-[0.2em] text-zinc-500 uppercase">
           [↑↓] Mover · [Enter] Entrar

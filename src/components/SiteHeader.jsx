@@ -34,7 +34,7 @@ function SiteHeader() {
 
             {/* Separador angular estilo Manga / Persona 5 */}
             <div className="flex items-center text-[#3B70B0]/60 font-mono text-sm font-black -skew-x-[20deg] select-none">
-              //
+              {'//'}
             </div>
 
             {/* Versión del portafolio */}
