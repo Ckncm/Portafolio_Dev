@@ -26,6 +26,8 @@ function alphaStyle(alpha) {
 
 function ParticleImage({
   src,
+  align = 'center',
+  sizeRatio = 0.45,
   step = SAMPLE_STEP,
   particleSize = PARTICLE_SIZE,
   repelRadius = REPEL_RADIUS,
@@ -69,12 +71,14 @@ function ParticleImage({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
       const off = document.createElement('canvas')
+      const nw = image.naturalWidth || image.width || 1199
+      const nh = image.naturalHeight || image.height || 1312
       const scale = Math.min(
-        (viewW * 0.45) / image.width,
-        (viewH * 0.45) / image.height,
+        (viewW * sizeRatio) / nw,
+        (viewH * sizeRatio) / nh,
       )
-      const iw = Math.max(1, Math.round(image.width * scale))
-      const ih = Math.max(1, Math.round(image.height * scale))
+      const iw = Math.max(1, Math.round(nw * scale))
+      const ih = Math.max(1, Math.round(nh * scale))
       off.width = iw
       off.height = ih
       const octx = off.getContext('2d', { willReadFrequently: true })
@@ -89,7 +93,10 @@ function ParticleImage({
       }
       const alphaMode = total > 0 && transparent / total > 0.2
 
-      const offsetX = (viewW - iw) / 2
+      let offsetX = (viewW - iw) / 2
+      if (align === 'left') {
+        offsetX = viewW < 640 ? (viewW - iw) / 2 : Math.max(48, Math.min(viewW * 0.12, 160))
+      }
       const offsetY = (viewH - ih) / 2
       const next = []
       for (let y = 0; y < ih; y += step) {
@@ -198,7 +205,7 @@ function ParticleImage({
       canvas.removeEventListener('touchmove', onPointerMove)
       window.removeEventListener('resize', onResize)
     }
-  }, [src, step, particleSize, repelRadius])
+  }, [src, align, sizeRatio, step, particleSize, repelRadius])
 
   return (
     <div className="relative h-full w-full">

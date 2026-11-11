@@ -6,11 +6,15 @@ const prefersReduced = () =>
 
 function PhoneMockup({ image, alt, title, onExpand }) {
   const containerRef = useRef(null)
+  const imgRef = useRef(null)
   const [reduced, setReduced] = useState(prefersReduced)
+  const [loadedSrc, setLoadedSrc] = useState('')
   const [transform, setTransform] = useState(
     'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
   )
   const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 })
+
+  const isLoaded = loadedSrc === image
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -18,6 +22,12 @@ function PhoneMockup({ image, alt, title, onExpand }) {
     media.addEventListener?.('change', onChange)
     return () => media.removeEventListener?.('change', onChange)
   }, [])
+
+  useEffect(() => {
+    if (imgRef.current?.complete && imgRef.current?.naturalWidth > 0) {
+      setLoadedSrc(image)
+    }
+  }, [image])
 
   const handleMouseMove = (e) => {
     if (reduced || !containerRef.current) return
@@ -51,7 +61,7 @@ function PhoneMockup({ image, alt, title, onExpand }) {
   }
 
   return (
-    <div className="relative mx-auto flex w-full max-w-[290px] sm:max-w-[320px] items-center justify-center py-2">
+    <div className="relative flex w-[min(270px,calc(100vw-11rem))] sm:w-[300px] md:w-[320px] shrink-0 items-center justify-center py-2">
       {/* Chasis exterior del smartphone - marco delgado y estilizado */}
       <div
         ref={containerRef}
@@ -89,14 +99,24 @@ function PhoneMockup({ image, alt, title, onExpand }) {
           className="absolute -right-[3px] top-22 h-12 w-[3px] rounded-r-sm bg-zinc-800 border-r border-t border-b border-zinc-700/80 sm:-right-[4px] sm:top-26 sm:h-14 sm:w-[4px]"
         />
 
-        {/* Pantalla interior del teléfono */}
-        <div className="relative aspect-[9/18.5] w-full overflow-hidden rounded-[1.35rem] bg-black ring-1 ring-zinc-900/60">
+        {/* Pantalla interior del teléfono con proporción fija */}
+        <div className="relative aspect-[9/18.5] w-full overflow-hidden rounded-[1.35rem] bg-zinc-950 ring-1 ring-zinc-900/60">
+          {/* Indicador mientras carga la imagen sin colapsar dimensiones */}
+          {!isLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-zinc-950">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#3B70B0]/30 border-t-[#3B70B0]" />
+            </div>
+          )}
+
           {/* Imagen de la pantalla actual */}
           <img
-            key={image}
+            ref={imgRef}
             src={image}
             alt={alt || `${title} pantalla`}
-            className="h-full w-full object-cover transition-opacity duration-300"
+            onLoad={() => setLoadedSrc(image)}
+            className={`h-full w-full object-cover transition-opacity duration-200 ${
+              isLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
             draggable={false}
           />
 
@@ -135,4 +155,3 @@ function PhoneMockup({ image, alt, title, onExpand }) {
 }
 
 export default PhoneMockup
-

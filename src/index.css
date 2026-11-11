@@ -130,6 +130,19 @@ body {
   animation: project-enter 450ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+@keyframes diagonal-wipe {
+  0% {
+    transform: translateX(-125%) skewX(-18deg);
+  }
+  34%,
+  62% {
+    transform: translateX(0%) skewX(-18deg);
+  }
+  100% {
+    transform: translateX(125%) skewX(-18deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .project-enter {
     animation: none;

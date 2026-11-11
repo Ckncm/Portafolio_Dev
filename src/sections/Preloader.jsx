@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import EncryptedText from '../components/EncryptedText.jsx'
+import ckncmLogo from '../assets/logos/ckncm_logo.svg'
+import { preloadImage, waitForFonts } from '../utils/preloadAssets.js'
 
-const EXIT_MS = 600
+const EXIT_MS = 500
 
 function Preloader({ onDone }) {
   const [exiting, setExiting] = useState(false)
@@ -9,27 +11,45 @@ function Preloader({ onDone }) {
   const reduced =
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const total = reduced ? 500 : 2300
+  const minDisplayMs = reduced ? 400 : 2150
 
   useEffect(() => {
-    let finished = false
-    const finish = () => {
-      if (finished) return
-      finished = true
-      setExiting(true)
-      setTimeout(onDone, EXIT_MS)
-    }
+    let cancelled = false
+    let minTimer = null
+    let exitTimer = null
 
-    const timer = setTimeout(finish, total)
-    return () => clearTimeout(timer)
-  }, [total, onDone])
+    const minDelay = new Promise((resolve) => {
+      minTimer = setTimeout(resolve, minDisplayMs)
+    })
+
+    // Precargar fuentes y logo principal mientras corre la animación criptográfica
+    const warmUp = Promise.all([
+      waitForFonts(1500),
+      preloadImage(ckncmLogo, 2000),
+    ])
+
+    Promise.all([minDelay, warmUp]).then(() => {
+      if (cancelled) return
+      setExiting(true)
+      exitTimer = setTimeout(() => {
+        if (!cancelled) onDone?.()
+      }, EXIT_MS)
+    })
+
+    return () => {
+      cancelled = true
+      if (minTimer) clearTimeout(minTimer)
+      if (exitTimer) clearTimeout(exitTimer)
+    }
+  }, [minDisplayMs, onDone])
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#050505] transition-all duration-500 ease-out ${exiting
-        ? 'pointer-events-none -translate-y-2 opacity-0'
-        : 'opacity-100'
-        }`}
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#050505] transition-all duration-500 ease-out ${
+        exiting
+          ? 'pointer-events-none -translate-y-2 opacity-0'
+          : 'opacity-100'
+      }`}
     >
       <div className="flex flex-col items-center gap-3 px-6 text-center md:gap-5">
         <EncryptedText

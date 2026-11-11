@@ -14,7 +14,7 @@ function Projects() {
     availableProjects[0]
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#050505]/90">
+    <section className="relative min-h-screen w-full overflow-hidden bg-[#050505]/75">
       <div
         className="pointer-events-none absolute left-1/2 top-0 h-full w-full -translate-x-1/2"
         style={{ filter: 'blur(30px)' }}
@@ -28,7 +28,7 @@ function Projects() {
           }}
         />
       </div>
-      <div className="relative mx-auto w-full max-w-5xl px-6 pt-10 pb-24">
+      <div className="relative mx-auto w-full max-w-5xl px-6 pt-24 sm:pt-20 pb-24">
         <div className="mb-10 flex flex-col items-center gap-3 text-center">
           <h2 className="font-mono text-4xl font-bold tracking-[0.2em] text-zinc-100 uppercase sm:text-5xl">
             Proyectos
