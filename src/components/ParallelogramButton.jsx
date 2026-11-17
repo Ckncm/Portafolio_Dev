@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useTextScramble } from '../hooks/useTextScramble.js'
 import { playConfirm, playCancel, playNavTick } from '../utils/soundEffects.js'
 
@@ -36,7 +35,6 @@ function ParallelogramButton({
   onMouseEnter,
 }) {
   const palette = ACCENT_STYLES[accent] ?? ACCENT_STYLES.blue
-  const [isFlashing, setIsFlashing] = useState(false)
   const scrambledLabel = useTextScramble(label, active)
 
   if (variant === 'back') {
@@ -80,12 +78,8 @@ function ParallelogramButton({
 
   const handleClick = (e) => {
     if (disabled) return
-    setIsFlashing(true)
     playConfirm()
-    setTimeout(() => {
-      setIsFlashing(false)
-      onClick?.(e)
-    }, 130)
+    onClick?.(e)
   }
 
   const handleMouseEnter = (e) => {
@@ -149,14 +143,6 @@ function ParallelogramButton({
             : `bg-[#050505] text-zinc-100 ${palette.hoverSurface}`
         }`}
       >
-        {/* Destello de confirmación al hacer clic */}
-        {isFlashing && (
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-30 bg-white/45 animate-pulse"
-          />
-        )}
-
         <div className="relative z-10 flex skew-x-[18deg] items-center justify-between w-full gap-4">
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Código numérico estilo HUD */}

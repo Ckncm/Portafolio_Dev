@@ -159,6 +159,74 @@ body {
   }
 }
 
+@keyframes phone-slide-in-next {
+  0% {
+    transform: translateX(100%);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes phone-slide-out-next {
+  0% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0.85;
+  }
+}
+
+@keyframes phone-slide-in-prev {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes phone-slide-out-prev {
+  0% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0.85;
+  }
+}
+
+@keyframes phone-chassis-next {
+  0% {
+    transform: perspective(1000px) rotateY(0deg) scale(1);
+  }
+  40% {
+    transform: perspective(1000px) rotateY(-8deg) scale(0.97) translateX(-8px);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(0deg) scale(1) translateX(0);
+  }
+}
+
+@keyframes phone-chassis-prev {
+  0% {
+    transform: perspective(1000px) rotateY(0deg) scale(1);
+  }
+  40% {
+    transform: perspective(1000px) rotateY(8deg) scale(0.97) translateX(8px);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(0deg) scale(1) translateX(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .project-enter {
     animation: none;

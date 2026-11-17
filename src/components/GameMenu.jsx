@@ -60,7 +60,7 @@ function GameMenu({ onSelectScreen, disabled = false }) {
       aria-label="Menú principal"
       className="flex w-full max-w-md flex-col gap-3.5 sm:gap-4"
     >
-      {/* Lista escalonada de botones en paralelogramo con entrada animada de abajo hacia arriba */}
+      {/* Lista escalonada de botones en paralelogramo */}
       <div className="flex flex-col gap-3.5 sm:gap-4">
         {menuItems.map((item, index) => (
           <div

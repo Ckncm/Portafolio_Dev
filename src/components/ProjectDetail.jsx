@@ -5,11 +5,13 @@ import { playNavTick } from '../utils/soundEffects.js'
 
 function ProjectDetail({ project }) {
   const [activeImageIndex, setActiveImageIndex] = useState(0)
+  const [direction, setDirection] = useState('next')
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
 
   // Reiniciar a la primera imagen al cambiar de proyecto y precargar capturas
   useEffect(() => {
     setActiveImageIndex(0)
+    setDirection('next')
     setIsLightboxOpen(false)
     project.images?.forEach((src) => {
       const img = new Image()
@@ -22,11 +24,13 @@ function ProjectDetail({ project }) {
 
   const handlePrev = () => {
     playNavTick()
+    setDirection('prev')
     setActiveImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   }
 
   const handleNext = () => {
     playNavTick()
+    setDirection('next')
     setActiveImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
   }
 
@@ -111,6 +115,7 @@ function ProjectDetail({ project }) {
                 image={images[activeImageIndex]}
                 title={project.title}
                 alt={`${project.title} pantalla ${activeImageIndex + 1}`}
+                direction={direction}
                 onExpand={() => setIsLightboxOpen(true)}
               />
 

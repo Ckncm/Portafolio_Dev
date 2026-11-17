@@ -4,17 +4,19 @@ const prefersReduced = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-function PhoneMockup({ image, alt, title, onExpand }) {
+function PhoneMockup({ image, alt, title, direction = 'next', onExpand }) {
   const containerRef = useRef(null)
   const imgRef = useRef(null)
   const [reduced, setReduced] = useState(prefersReduced)
-  const [loadedSrc, setLoadedSrc] = useState('')
+  const [displayedImage, setDisplayedImage] = useState(image)
+  const [outgoingImage, setOutgoingImage] = useState(null)
+  const [slideDirection, setSlideDirection] = useState('next')
+  const [chassisAnim, setChassisAnim] = useState('')
+
   const [transform, setTransform] = useState(
     'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
   )
   const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 })
-
-  const isLoaded = loadedSrc === image
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -23,11 +25,28 @@ function PhoneMockup({ image, alt, title, onExpand }) {
     return () => media.removeEventListener?.('change', onChange)
   }, [])
 
+  // Transición suave al cambiar de captura
   useEffect(() => {
-    if (imgRef.current?.complete && imgRef.current?.naturalWidth > 0) {
-      setLoadedSrc(image)
+    if (image !== displayedImage) {
+      if (!reduced) {
+        setOutgoingImage(displayedImage)
+        setSlideDirection(direction)
+        setChassisAnim(
+          direction === 'next' ? 'phone-chassis-next' : 'phone-chassis-prev'
+        )
+
+        const timer = setTimeout(() => {
+          setOutgoingImage(null)
+          setChassisAnim('')
+        }, 400)
+
+        setDisplayedImage(image)
+        return () => clearTimeout(timer)
+      }
+
+      setDisplayedImage(image)
     }
-  }, [image])
+  }, [image, direction, displayedImage, reduced])
 
   const handleMouseMove = (e) => {
     if (reduced || !containerRef.current) return
@@ -61,7 +80,16 @@ function PhoneMockup({ image, alt, title, onExpand }) {
   }
 
   return (
-    <div className="relative flex w-[min(270px,calc(100vw-11rem))] sm:w-[300px] md:w-[320px] shrink-0 items-center justify-center py-2">
+    <div
+      className="relative flex w-[min(270px,calc(100vw-11rem))] sm:w-[300px] md:w-[320px] shrink-0 items-center justify-center py-2"
+      style={
+        chassisAnim && !reduced
+          ? {
+              animation: `${chassisAnim} 420ms cubic-bezier(0.22, 1, 0.36, 1)`,
+            }
+          : undefined
+      }
+    >
       {/* Chasis exterior del smartphone - marco delgado y estilizado */}
       <div
         ref={containerRef}
@@ -101,22 +129,41 @@ function PhoneMockup({ image, alt, title, onExpand }) {
 
         {/* Pantalla interior del teléfono con proporción fija */}
         <div className="relative aspect-[9/18.5] w-full overflow-hidden rounded-[1.35rem] bg-zinc-950 ring-1 ring-zinc-900/60">
-          {/* Indicador mientras carga la imagen sin colapsar dimensiones */}
-          {!isLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center bg-zinc-950">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#3B70B0]/30 border-t-[#3B70B0]" />
-            </div>
+          {/* Imagen saliente (animada al salir) */}
+          {outgoingImage && (
+            <img
+              key={`out-${outgoingImage}`}
+              src={outgoingImage}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{
+                animation:
+                  slideDirection === 'next'
+                    ? 'phone-slide-out-next 400ms cubic-bezier(0.22, 1, 0.36, 1) forwards'
+                    : 'phone-slide-out-prev 400ms cubic-bezier(0.22, 1, 0.36, 1) forwards',
+              }}
+              draggable={false}
+            />
           )}
 
-          {/* Imagen de la pantalla actual */}
+          {/* Imagen entrante (animada al entrar) */}
           <img
+            key={`in-${displayedImage}`}
             ref={imgRef}
-            src={image}
+            src={displayedImage}
             alt={alt || `${title} pantalla`}
-            onLoad={() => setLoadedSrc(image)}
-            className={`h-full w-full object-cover transition-opacity duration-200 ${
-              isLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
+            className="absolute inset-0 h-full w-full object-cover"
+            style={
+              outgoingImage
+                ? {
+                    animation:
+                      slideDirection === 'next'
+                        ? 'phone-slide-in-next 400ms cubic-bezier(0.22, 1, 0.36, 1) forwards'
+                        : 'phone-slide-in-prev 400ms cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                  }
+                : undefined
+            }
             draggable={false}
           />
 
