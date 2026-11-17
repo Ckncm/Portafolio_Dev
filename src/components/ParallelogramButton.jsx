@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import { useTextScramble } from '../hooks/useTextScramble.js'
+import { playConfirm, playCancel, playNavTick } from '../utils/soundEffects.js'
+
 const ACCENT_STYLES = {
   blue: {
     beamColor: '#3B70B0',
@@ -27,16 +31,26 @@ function ParallelogramButton({
   variant = 'menu',
   active = false,
   disabled = false,
+  soundFn,
   onClick,
   onMouseEnter,
 }) {
   const palette = ACCENT_STYLES[accent] ?? ACCENT_STYLES.blue
+  const [isFlashing, setIsFlashing] = useState(false)
+  const scrambledLabel = useTextScramble(label, active)
 
   if (variant === 'back') {
     return (
       <button
         type="button"
-        onClick={onClick}
+        onClick={(e) => {
+          if (disabled) return
+          playCancel()
+          onClick?.(e)
+        }}
+        onMouseEnter={() => {
+          if (!disabled) playNavTick()
+        }}
         disabled={disabled}
         aria-label="Volver al menú principal"
         className="group relative cursor-pointer -skew-x-[18deg] border-2 border-[#D62D32] bg-[#050505] px-4 py-2 sm:px-5 sm:py-2.5 text-zinc-100 shadow-[4px_4px_0px_rgba(0,0,0,0.95)] transition-all duration-200 hover:-translate-x-1 hover:bg-[#D62D32] hover:text-white active:translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
@@ -64,11 +78,32 @@ function ParallelogramButton({
     )
   }
 
+  const handleClick = (e) => {
+    if (disabled) return
+    setIsFlashing(true)
+    playConfirm()
+    setTimeout(() => {
+      setIsFlashing(false)
+      onClick?.(e)
+    }, 130)
+  }
+
+  const handleMouseEnter = (e) => {
+    if (!active && !disabled) {
+      if (typeof soundFn === 'function') {
+        soundFn()
+      } else {
+        playNavTick()
+      }
+    }
+    onMouseEnter?.(e)
+  }
+
   return (
     <button
       type="button"
-      onClick={onClick}
-      onMouseEnter={onMouseEnter}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
       disabled={disabled}
       className={`group relative w-full cursor-pointer -skew-x-[18deg] overflow-hidden p-[2px] text-left shadow-[5px_5px_0px_rgba(0,0,0,0.95)] transition-all duration-200 disabled:pointer-events-none ${
         active
@@ -114,6 +149,14 @@ function ParallelogramButton({
             : `bg-[#050505] text-zinc-100 ${palette.hoverSurface}`
         }`}
       >
+        {/* Destello de confirmación al hacer clic */}
+        {isFlashing && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-30 bg-white/45 animate-pulse"
+          />
+        )}
+
         <div className="relative z-10 flex skew-x-[18deg] items-center justify-between w-full gap-4">
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Código numérico estilo HUD */}
@@ -129,10 +172,10 @@ function ParallelogramButton({
               </span>
             )}
 
-            {/* Título y subtítulo */}
+            {/* Título decodificable y subtítulo */}
             <div className="flex flex-col">
               <span className="font-mono text-base sm:text-xl font-extrabold tracking-[0.18em] uppercase">
-                {label}
+                {scrambledLabel}
               </span>
               {subtitle && (
                 <span

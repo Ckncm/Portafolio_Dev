@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import WaterCard from '../components/WaterCard.jsx'
 import { certificates } from '../data/certificates.js'
+import { playNavTick } from '../utils/soundEffects.js'
 
 function Formacion() {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -8,6 +9,7 @@ function Formacion() {
   const touchStart = useRef(null)
 
   const goTo = useCallback((index, dir) => {
+    playNavTick()
     setDirection(dir || 'next')
     setActiveIndex((index + certificates.length) % certificates.length)
   }, [])

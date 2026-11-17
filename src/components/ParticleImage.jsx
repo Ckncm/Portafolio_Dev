@@ -176,6 +176,27 @@ function ParticleImage({
       mouseRef.current = { x: -9999, y: -9999 }
     }
 
+    const onPointerDown = (e) => {
+      if (reduced) return
+      const rect = canvas.getBoundingClientRect()
+      const point = e.touches ? e.touches[0] : e
+      const clickX = point.clientX - rect.left
+      const clickY = point.clientY - rect.top
+      const shockRadius = 240
+      const shockForce = 20
+      for (const p of particles) {
+        const dx = p.x - clickX
+        const dy = p.y - clickY
+        const d2 = dx * dx + dy * dy
+        if (d2 < shockRadius * shockRadius && d2 > 0.01) {
+          const d = Math.sqrt(d2)
+          const force = (1 - d / shockRadius) * shockForce
+          p.vx += (dx / d) * force
+          p.vy += (dy / d) * force
+        }
+      }
+    }
+
     const onResize = () => {
       clearTimeout(resizeTimer)
       resizeTimer = setTimeout(() => {
@@ -191,6 +212,8 @@ function ParticleImage({
         window.addEventListener('mousemove', onPointerMove)
         canvas.addEventListener('mouseleave', onPointerLeave)
         canvas.addEventListener('touchmove', onPointerMove, { passive: true })
+        canvas.addEventListener('mousedown', onPointerDown)
+        canvas.addEventListener('touchstart', onPointerDown, { passive: true })
       }
     }
     image.src = src
@@ -203,6 +226,8 @@ function ParticleImage({
       window.removeEventListener('mousemove', onPointerMove)
       canvas.removeEventListener('mouseleave', onPointerLeave)
       canvas.removeEventListener('touchmove', onPointerMove)
+      canvas.removeEventListener('mousedown', onPointerDown)
+      canvas.removeEventListener('touchstart', onPointerDown)
       window.removeEventListener('resize', onResize)
     }
   }, [src, align, sizeRatio, step, particleSize, repelRadius])

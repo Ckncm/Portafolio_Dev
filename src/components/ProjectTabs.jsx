@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { playNavTick } from '../utils/soundEffects.js'
 
 function ProjectTabs({ projects, activeId, onSelect }) {
   const tabRefs = useRef([])
@@ -38,6 +39,7 @@ function ProjectTabs({ projects, activeId, onSelect }) {
     const delta = event.key === 'ArrowRight' ? 1 : -1
     const nextIndex =
       (index + delta + projects.length) % projects.length
+    playNavTick()
     onSelect(projects[nextIndex].id)
     tabRefs.current[nextIndex]?.focus()
   }
@@ -64,7 +66,10 @@ function ProjectTabs({ projects, activeId, onSelect }) {
               aria-selected={isActive}
               aria-controls="project-panel"
               tabIndex={isActive ? 0 : -1}
-              onClick={() => onSelect(project.id)}
+              onClick={() => {
+                playNavTick()
+                onSelect(project.id)
+              }}
               onKeyDown={(event) => handleKeyDown(event, index)}
               className="group flex shrink-0 snap-center flex-col items-center gap-2 outline-none"
             >

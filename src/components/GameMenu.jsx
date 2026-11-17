@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { menuItems } from '../data/menuItems.js'
 import ParallelogramButton from './ParallelogramButton.jsx'
+import { playConfirm, playSariaSongNote } from '../utils/soundEffects.js'
 
 function GameMenu({ onSelectScreen, disabled = false }) {
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -11,16 +12,41 @@ function GameMenu({ onSelectScreen, disabled = false }) {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowDown') {
         e.preventDefault()
-        setSelectedIndex((prev) => (prev + 1) % menuItems.length)
+        setSelectedIndex((prev) => {
+          const next = (prev + 1) % menuItems.length
+          playSariaSongNote(next)
+          return next
+        })
       } else if (e.key === 'ArrowUp') {
         e.preventDefault()
-        setSelectedIndex(
-          (prev) => (prev - 1 + menuItems.length) % menuItems.length
-        )
+        setSelectedIndex((prev) => {
+          const next = (prev - 1 + menuItems.length) % menuItems.length
+          playSariaSongNote(next)
+          return next
+        })
       } else if (e.key === 'Enter') {
+        e.preventDefault()
+        e.stopPropagation()
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur()
+        }
+        playConfirm()
         const current = menuItems[selectedIndex]
         if (current) {
           onSelectScreen(current.id)
+        }
+      } else if (['1', '2', '3'].includes(e.key)) {
+        const index = parseInt(e.key, 10) - 1
+        const target = menuItems[index]
+        if (target) {
+          e.preventDefault()
+          e.stopPropagation()
+          if (document.activeElement && typeof document.activeElement.blur === 'function') {
+            document.activeElement.blur()
+          }
+          playConfirm()
+          setSelectedIndex(index)
+          onSelectScreen(target.id)
         }
       }
     }
@@ -32,29 +58,8 @@ function GameMenu({ onSelectScreen, disabled = false }) {
   return (
     <nav
       aria-label="Menú principal"
-      className="flex w-full max-w-md flex-col gap-3 sm:gap-4"
+      className="flex w-full max-w-md flex-col gap-3.5 sm:gap-4"
     >
-      {/* Encabezado HUD del menú */}
-      <div
-        className="mb-1 flex items-center justify-between px-2"
-        style={{
-          animation: 'menu-item-enter 450ms cubic-bezier(0.16, 1, 0.3, 1) 0ms backwards',
-        }}
-      >
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3B70B0] opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#3B70B0]" />
-          </span>
-          <span className="font-mono text-[10px] sm:text-xs font-bold tracking-[0.3em] text-[#3B70B0] uppercase">
-            {'// Menu Principal'}
-          </span>
-        </div>
-        <span className="hidden sm:inline-block font-mono text-[10px] tracking-[0.2em] text-zinc-500 uppercase">
-          [↑↓] Mover · [Enter] Entrar
-        </span>
-      </div>
-
       {/* Lista escalonada de botones en paralelogramo con entrada animada de abajo hacia arriba */}
       <div className="flex flex-col gap-3.5 sm:gap-4">
         {menuItems.map((item, index) => (
@@ -74,6 +79,7 @@ function GameMenu({ onSelectScreen, disabled = false }) {
               accent={item.accent}
               active={selectedIndex === index}
               disabled={disabled}
+              soundFn={() => playSariaSongNote(index)}
               onMouseEnter={() => setSelectedIndex(index)}
               onClick={() => onSelectScreen(item.id)}
             />
@@ -85,4 +91,3 @@ function GameMenu({ onSelectScreen, disabled = false }) {
 }
 
 export default GameMenu
-

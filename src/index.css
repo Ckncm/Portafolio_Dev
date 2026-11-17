@@ -134,10 +134,6 @@ body {
   0% {
     transform: translateX(-125%) skewX(-18deg);
   }
-  34%,
-  62% {
-    transform: translateX(0%) skewX(-18deg);
-  }
   100% {
     transform: translateX(125%) skewX(-18deg);
   }

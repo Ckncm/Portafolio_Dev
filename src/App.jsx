@@ -10,6 +10,7 @@ import SiteHeader from './components/SiteHeader.jsx'
 import DotField from './components/DotField.jsx'
 import SocialLinks from './sections/SocialLinks.jsx'
 import Formacion from './sections/Formacion.jsx'
+import { playCancel } from './utils/soundEffects.js'
 
 function App() {
   const [showPreloader, setShowPreloader] = useState(true)
@@ -66,6 +67,7 @@ function App() {
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && !document.querySelector('[role="dialog"]')) {
+        playCancel()
         navigateTo('home')
       }
     }

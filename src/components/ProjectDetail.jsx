@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import PhoneMockup from './PhoneMockup.jsx'
 import ImageLightbox from './ImageLightbox.jsx'
+import { playNavTick } from '../utils/soundEffects.js'
 
 function ProjectDetail({ project }) {
   const [activeImageIndex, setActiveImageIndex] = useState(0)
@@ -20,10 +21,12 @@ function ProjectDetail({ project }) {
   const hasImages = images.length > 0
 
   const handlePrev = () => {
+    playNavTick()
     setActiveImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   }
 
   const handleNext = () => {
+    playNavTick()
     setActiveImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
   }
 
